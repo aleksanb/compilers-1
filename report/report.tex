@@ -2,6 +2,8 @@
 \usepackage{fancyhdr}
 \usepackage{enumitem}
 \usepackage{tikz}
+\usepackage{float}
+\usepackage{listings}
 
 \title{Homework module: Compiler Technology}
 
@@ -9,6 +11,12 @@
 \rhead{TDT4205 - Compilers}
 
 \author{Aleksander Vognild Burkow}
+
+\lstset{
+    language=C,
+    tabsize=2,
+    frame=single
+}
 
 \begin{document}
 
@@ -20,9 +28,60 @@
 \section{Regular languages}
 
 \begin{enumerate}[label=\alph*)]
-\item Convert the regular expression $ a(b|c)d\*e $ to a NFA.
+\item
+    The following is a NFA implementation of the regular expression. \ref{fig:nfa}
+    \input{nfa.tex}
 
-\input{nfa.tex}
+\item
+    The converted NFA is presented below. \ref{fig:dfa}
+    \input{dfa.tex}
+
+\item
+    The program will be able to remove simple while loops without any nesting inside.
+
+    Issues will arise in the following cases:
+    \begin{enumerate}[label=\roman*]
+    \item
+    Nested statements:
+
+\begin{lstlisting}
+while (COND) {
+    if (1) {
+    } // End will be matched
+}
+\end{lstlisting}
+
+    Flex will match the end of the while with the end of the if statement.
+
+    \item
+    Do while constructs:
+\begin{lstlisting}
+do {
+    ...
+} while (COND);
+if (3.14) {
+    // Will be matched here
+}
+\end{lstlisting}
+
+    The end of the do while statement be matched with the end if the if. The do part remains intact.
+
+    \item
+    Strings:
+
+\begin{lstlisting}
+while (true) {
+    char omfg[] = "do not touch my while {";
+}
+\end{lstlisting}
+
+    Flex will mistakenly demolish the string.
+    \end{enumerate}
+
+The correct way to remove loops would be to ignore the node at the parser level. The lexer has no idea about the semantic meanings of the tokens may encounter, and cannot decide if the matched brackets belong to a while statement or some poor soon-to-be dismembered if statement.
+
+Implementing removal of while-loops in bison (by ignoring the node) will ensure only well formed while-loops will be removed.
+
 
 \end{enumerate}
 
