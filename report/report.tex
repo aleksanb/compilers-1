@@ -2,10 +2,9 @@
 \usepackage{fancyhdr}
 \usepackage{enumitem}
 \usepackage{tikz}
-\usepackage{float}
-\usepackage{listings}
+\usepackage{float} \usepackage{listings}
 
-\title{Homework module: Compiler Technology}
+\title{Homework module \#2: Compiler Technology}
 
 \lhead{Homework module \#2}
 \rhead{TDT4205 - Compilers}
@@ -36,6 +35,7 @@
     The converted NFA is presented below. \ref{fig:dfa}
     \input{dfa.tex}
 
+\newpage
 \item
     The program will be able to remove simple while loops without any nesting inside.
 
@@ -82,6 +82,50 @@ The correct way to remove loops would be to ignore the node at the parser level.
 
 Implementing removal of while-loops in bison (by ignoring the node) will ensure only well formed while-loops will be removed.
 
+
+\end{enumerate}
+
+\newpage
+
+\section{Grammars}
+
+\begin{enumerate}[label=\alph*)]
+
+\item
+    An ambigous grammar is a formal grammar which allows for more than one leftmost derivation for any expression.
+
+\item
+    Ambiguity is an undecidable problem, but if we study the string $ mvmp $ we see that two productions arise:
+
+\begin{enumerate}[label=\roman*]
+\item
+    S = NvN  (Use S = NvN)
+
+    NvN = mvN (Use N = m)
+
+    mvN = mvmp (Use N = mp)
+
+    mvmp
+
+\item
+    S = Sp (Use S = NvN)
+
+    Sp = NvNp (Use S = NvN)
+
+    NvNp = mvmp (Use N = m)
+
+    mvmp
+
+\end{enumerate}
+Here we see two different parse trees for the same production. We conclude the grammar is ambigous.
+
+\item
+An left-recursive grammar is a grammar in which there exists a non-terminal where one of its productions (transitive or immediate) has itself as the leftmost symbol.
+
+\item
+The grammar is left recursive. This is seen by the fact that we can produce $ Sp $ from $ S $.
+    
+    
 
 \end{enumerate}
 
